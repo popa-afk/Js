@@ -6,57 +6,36 @@
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript">
     </script>
     <script type="text/javascript">
-        ymaps.ready(init);
-        var myMap, 
-            myPlacemark,
-            myYear;
+ymaps.ready(init);
 
+function init() {
+    var myMap = new ymaps.Map("map", {
+            center: [55.43, 37.75],
+            zoom: 8
+        }, {
+            searchControlProvider: 'yandex#search'
+        });
 
-        function init(){ 
-            myMap = new ymaps.Map("map", {
-                center: [59.93, 30.31],
-                zoom: 7
-            });             
-        }
+        var myPolygon = new ymaps.GeoObject({
+    geometry: {
+        type: "Polygon",
+        coordinates: [
+        [[52.526330, 13.359453], [50.083937, 14.411295], [47.490594, 19.053736]],
+        [[44.458229, 26.099293], [50.454645, 30.496050], [47.490594, 19.053736]],
+        [[55.756416, 37.620943], [59.937300, 30.311784], [47.490594, 19.053736]],
+        [[52.391370, 4.899695], [48.873881, 2.318684], [47.490594, 19.053736]],
+        [[52.261179, 20.982928], [59.342920, 18.088339], [47.490594, 19.053736]],
+        ]
+    }
+});
+myMap.geoObjects.add(myPolygon);
+myMap.setBounds(polygon.geometry.getBounds());
+}
 
-        function countY() {
-            myYear = document.getElementById('textYear').value            
-
-            myMap.geoObjects.remove(myPlacemark);
-
-            if (myYear > 1914 && myYear < 1923) {
-                myYear = 'Петроград'
-                myPlacemark = new ymaps.Placemark([59.93, 30.31], {
-                hintContent: 'Петроград'
-                });
-            
-                myMap.geoObjects.add(myPlacemark);
-
-            } 
-            else if (myYear > 1924 && myYear < 1991) {
-                myYear = 'Ленинград'
-                myPlacemark = new ymaps.Placemark([59.93, 30.31], {
-                hintContent: 'Ленинград'
-                });
-            
-                myMap.geoObjects.add(myPlacemark);
-            }          
-            else {
-                myYear = 'Санкт-Петербург'
-                myPlacemark = new ymaps.Placemark([59.93, 30.31], {
-                hintContent: 'Санкт-Петербург!'
-                });
-            
-                myMap.geoObjects.add(myPlacemark);
-            }
-        }
     </script>
 </head>
 <body>
     <div id="map" style="width: 600px; height: 400px"></div>
-    <p>Год</p>
-    <input type="number" id="textYear" size="40">
-    <input type="button" onclick="countY()" value="Ввод">
 </body>
 
 
