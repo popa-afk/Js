@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+    <style>
+  input.text {
+    
+      width:  200px;
+      height: 15px;
+      padding: 5px 10px 5px 10px;
+      border:5px solid rgb(40, 110, 202);
+      font-size:16px;
+      font-family: Tahoma;
+  }
+  </style>
+
+  <script>
+window.onload = init;
+function init(){
+    var button = document.getElementById("butt")
+    button.onclick = handleButtonClick;
+
+}
+
+function handleButtonClick() {
+  var city1=document.getElementById("cname1").value,
+      city2=document.getElementById("cname2").value,
+      city3=document.getElementById("cname3").value,
+      city4=document.getElementById("cname4").value;
+      if(city1 == ""|| city2== "" || city3== "" || city4 == ""){
+        alert("Заполните корректно форму");
+    }else{
+      weatherBalloon( city1,"temp1" );
+      weatherBalloon( city2,"temp2" );
+      weatherBalloon( city3,"temp3" );
+      weatherBalloon( city4,"temp4" );
+    }
+
+}
+
+function weatherBalloon(CityName, id) {
+        var key = '55b5474cf0e1f72dcc8d34a3af025b6f', 
+      link = "https://api.openweathermap.org/data/2.5/weather?q=";
+      
+            fetch(link + CityName + '&appid=' + key)
+            .then(function(resp) { return resp.json() }) // Convert data to json
+            .then(function(data) {
+              drawWeather(data,id);
+            })
+            .catch(function() {
+              // catch any errors
+            });
+            }
+
+  
+  function drawWeather( d ,id) {
+  var celcius = Math.round(parseFloat(d.main.temp)-273.15);
+	var fahrenheit = Math.round(((parseFloat(d.main.temp)-273.15)*1.8)+32);
+  var description = d.weather[0].description; 
+  var windspeed=d.wind.speed;
+	
+	document.getElementById(id).value = " температура: "+ celcius + '° ' + description + " скорость ветра: " + windspeed + " м/с";
+  
+  if( description.indexOf('rain') > 0 ) {
+  	document.body.className = 'rainy';
+  } else if( description.indexOf('cloud') > 0 ) {
+  	document.body.className = 'cloudy';
+  } else if( description.indexOf('sunny') > 0 ) {
+  	document.body.className = 'sunny';
+  } else {
+  	document.body.className = 'clear';
+  }
+}
+    </script>
+
+</head>
+<body>
+    <div style="margin-top: 50px;margin-left: 100px;"> 
+    Город1: <input type="text" class="text" id="cname1" placeholder="город 1" /><output id="temp1"></output><br>
+    Город2: <input type="text" class="text" id="cname2" placeholder="город 2" /><output id="temp2"></output><br>
+    Город3: <input type="text" class="text" id="cname3" placeholder="город 3" /><output id="temp3"></output><br>
+    Город4: <input type="text" class="text" id="cname4" placeholder="город 4" /><output id="temp4"></output><br>
+    <button type = "button" class="text" name = "button1" id="butt" style="margin-top: 20px;margin-left: 100px; width: 100px;">
+        <b>ЖМИ</b>
+    </div>
+</body>
+</html>
